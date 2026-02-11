@@ -1,0 +1,40 @@
+from sqlalchemy import create_engine, MetaData
+from sqlalchemy.ext.declarative import declarative_base
+from databases import Database
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
+DATABASE_URL = "postgresql+asyncpg://master:Thedoors420.@db:5432/back_properties"
+
+
+database = Database(DATABASE_URL)
+engine = create_async_engine(DATABASE_URL, echo=True)
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    expire_on_commit=False,
+    bind=engine,
+    class_=AsyncSession  # Asegúrate de que la sesión sea asíncrona
+)
+
+metadata = MetaData()
+Base = declarative_base(metadata=metadata)
+
+async def init_db():
+    print("Empezando")
+    try:
+        print("Try")
+        from app.models.user import UserBD
+
+        async with engine.begin() as conn:
+            await conn.run_sync(metadata.create_all)
+            print("fin")
+    except Exception as  msg:
+        print(msg)
+
+
+async def get_db():
+    async with SessionLocal() as db:
+        try:
+            yield db
+        finally:
+            await db.close()
