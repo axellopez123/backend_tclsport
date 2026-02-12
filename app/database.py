@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from databases import Database
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
-DATABASE_URL = "postgresql+asyncpg://master:Thedoors420.@db:5432/back_properties"
+DATABASE_URL = "postgresql+asyncpg://master:Thedoors420.@db:5432/tclsport"
 
 
 database = Database(DATABASE_URL)
@@ -23,7 +23,7 @@ async def init_db():
     print("Empezando")
     try:
         print("Try")
-        from app.models.user import UserBD
+        from app.auth.models.user import UserDB
 
         async with engine.begin() as conn:
             await conn.run_sync(metadata.create_all)
