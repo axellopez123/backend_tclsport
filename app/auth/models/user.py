@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Boolean, Integer, Date, DateTime
+from sqlalchemy import Column, String, Boolean, Integer, Date, DateTime, ForeignKey
 from app.database import Base
 from datetime import datetime
 from sqlalchemy.orm import relationship
@@ -25,3 +25,19 @@ class UserDB(Base):
     @property
     def is_active(self) -> bool:
         return not self.disabled
+
+
+
+class Admin(Base):
+    __tablename__ = "admins"
+
+    id = Column(Integer, primary_key=True, index=True)
+    nombre = Column(String(150), nullable=False)
+    email = Column(String(150), unique=True, index=True, nullable=False)
+    password = Column(String(255), nullable=False)
+    is_active = Column(Boolean, default=True)
+
+    company_id = Column(Integer, ForeignKey("companies.id"), nullable=False)
+
+    # Relación
+    company = relationship("Company", back_populates="admins")
