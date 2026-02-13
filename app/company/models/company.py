@@ -12,5 +12,5 @@ class Company(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     # Relaciones
-    admins = relationship("Admin", back_populates="company", cascade="all, delete")
+    users = relationship("UserDB", back_populates="company", cascade="all, delete")
     events = relationship("Event", back_populates="company", cascade="all, delete")

@@ -19,26 +19,12 @@ class UserDB(Base):
     birthdate = Column(Date, nullable=True) 
     hashed_password = Column(String)
     role = Column(SQLAlchemyEnum(UserRole), default=UserRole.CLIENTE, nullable=False)
-    is_active = Column(Boolean, default=True)
+    company_id = Column(Integer, ForeignKey("companies.id"), nullable=True)
+    disabled = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+    company = relationship("Company", back_populates="admins")
 
     @property
     def is_active(self) -> bool:
         return not self.disabled
-
-
-
-class Admin(Base):
-    __tablename__ = "admins"
-
-    id = Column(Integer, primary_key=True, index=True)
-    nombre = Column(String(150), nullable=False)
-    email = Column(String(150), unique=True, index=True, nullable=False)
-    password = Column(String(255), nullable=False)
-    is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-
-    company_id = Column(Integer, ForeignKey("companies.id"), nullable=False)
-
-    # Relación
-    company = relationship("Company", back_populates="admins")
