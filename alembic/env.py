@@ -1,3 +1,4 @@
+import os
 import asyncio
 from logging.config import fileConfig
 
@@ -18,6 +19,13 @@ from app.events.models.event import event
 # Alembic Config
 config = context.config
 
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+config = context.config
+
+if DATABASE_URL:
+    config.set_main_option("sqlalchemy.url", DATABASE_URL)
+
 # logging
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
@@ -31,11 +39,10 @@ target_metadata = Base.metadata
 # -------------------------
 def run_migrations_offline():
     """Run migrations in offline mode."""
-    
-    url = config.get_main_option("sqlalchemy.url")
+
     
     context.configure(
-        url=url,
+        url=DATABASE_URL,
         target_metadata=target_metadata,
         literal_binds=True,
         compare_type=True,          # detecta cambios de tipo
@@ -61,9 +68,12 @@ def do_run_migrations(connection: Connection):
     with context.begin_transaction():
         context.run_migrations()
 
-
 async def run_migrations_online():
-    
+
+    DATABASE_URL = os.getenv("DATABASE_URL")
+
+    config.set_main_option("sqlalchemy.url", DATABASE_URL)
+
     connectable = async_engine_from_config(
         config.get_section(config.config_ini_section),
         prefix="sqlalchemy.",
@@ -75,7 +85,6 @@ async def run_migrations_online():
         await connection.run_sync(do_run_migrations)
 
     await connectable.dispose()
-
 
 # -------------------------
 # ENTRY POINT

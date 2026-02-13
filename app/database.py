@@ -1,9 +1,13 @@
+import os
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from databases import Database
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
-DATABASE_URL = "postgresql+asyncpg://master:Thedoors420.@db:5432/tclsport"
+
+
+# DATABASE_URL = "postgresql+asyncpg://master:Thedoors420.@db:5432/tclsport"
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 
 database = Database(DATABASE_URL)
