@@ -12,8 +12,8 @@ from app.database import Base
 
 # IMPORTA TODOS TUS MODELOS AQUÍ
 from app.auth.models.user import UserDB
-from app.company.models.company import company
-from app.events.models.event import event
+from app.company.models.company import Company
+from app.events.models.event import Event
 
 
 # Alembic Config
