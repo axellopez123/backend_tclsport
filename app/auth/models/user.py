@@ -19,7 +19,7 @@ class UserDB(Base):
     birthdate = Column(Date, nullable=True) 
     hashed_password = Column(String)
     role = Column(SQLAlchemyEnum(UserRole), default=UserRole.CLIENTE, nullable=False)
-    disabled = Column(Boolean, default=False)
+    is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     @property
@@ -36,6 +36,7 @@ class Admin(Base):
     email = Column(String(150), unique=True, index=True, nullable=False)
     password = Column(String(255), nullable=False)
     is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
     company_id = Column(Integer, ForeignKey("companies.id"), nullable=False)
 

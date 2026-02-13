@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import relationship
-from database import Base
+from app.database import Base
 from datetime import datetime
 
 class Company(Base):
@@ -9,7 +9,7 @@ class Company(Base):
     id = Column(Integer, primary_key=True, index=True)
     nombre = Column(String(150), nullable=False)
     rfc = Column(String(20), unique=True, nullable=False)
-    fecha_creacion = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
     # Relaciones
     admins = relationship("Admin", back_populates="company", cascade="all, delete")
