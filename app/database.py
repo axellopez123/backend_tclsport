@@ -20,10 +20,11 @@ metadata = MetaData()
 Base = declarative_base(metadata=metadata)
 
 async def init_db():
-    print("Empezando")
     try:
-        print("Try")
         from app.auth.models.user import UserDB
+        from app.company.models.company import company
+        from app.events.models.event import event
+
 
         async with engine.begin() as conn:
             await conn.run_sync(metadata.create_all)

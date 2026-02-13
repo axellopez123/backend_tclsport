@@ -11,9 +11,7 @@ from fastapi.staticfiles import StaticFiles
 app = FastAPI()
 
 origins = [
-    "https://inmobiliaria.arwax.pro",
-    "http://localhost:5173",   # Tu frontend local
-    "https://back-properties.arwax.pro",  
+    "*"
 ]
 
 # Middleware CORS
