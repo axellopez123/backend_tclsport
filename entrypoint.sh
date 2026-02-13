@@ -1,19 +1,37 @@
-#!/bin/bash
-# #!/bin/sh
+#!/bin/sh
 
-# echo "Esperando a la base de datos..."
+set -e
 
-# while ! pg_isready -h db -U user; do
-#   sleep 1
-# done
+echo "Esperando a PostgreSQL..."
 
-# echo "Base de datos lista. Ejecutando migraciones..."
+# Esperar a que PostgreSQL esté disponible
+while ! python -c "
+import socket
+import sys
+s = socket.socket()
+try:
+    s.connect(('db', 5432))
+    s.close()
+except Exception:
+    sys.exit(1)
+"
+do
+  echo "PostgreSQL no disponible aún..."
+  sleep 2
+done
 
-# alembic upgrade head
+echo "PostgreSQL listo."
 
-# echo "Iniciando FastAPI..."
+echo "Aplicando migraciones Alembic..."
 
-# Iniciar FastAPI
-/opt/venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8008 --reload
+alembic upgrade head
 
+echo "Migraciones aplicadas."
 
+echo "Iniciando FastAPI..."
+
+exec uvicorn app.main:app \
+    --host 0.0.0.0 \
+    --port 8008 \
+    --workers 1
+    --reload
